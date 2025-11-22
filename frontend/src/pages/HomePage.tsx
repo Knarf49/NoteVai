@@ -8,6 +8,7 @@ import { type Note } from "@/lib/types";
 import NoteCard from "@/components/NoteCard";
 import api from "@/lib/axios";
 import NotesNotFound from "@/components/NoteNotFound";
+import axios from "axios";
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -21,9 +22,9 @@ const HomePage = () => {
         console.log(res.data);
         setNotes(res.data);
         setIsRateLimited(false);
-      } catch (error) {
+      } catch (error: unknown) {
         console.log("Error fetching notes");
-        if (error.response?.status === 429) {
+        if (axios.isAxiosError(error) && error.response?.status === 429) {
           setIsRateLimited(true);
         } else {
           toast.error("Failed to load notes");

@@ -9,9 +9,10 @@ import { ArrowLeftIcon, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate, useParams } from "react-router";
+import { type Note } from "@/lib/types";
 
 const NoteDetail = () => {
-  const [note, setNote] = useState(null);
+  const [note, setNote] = useState<Note | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -47,7 +48,7 @@ const NoteDetail = () => {
   };
 
   const handleSave = async () => {
-    if (!note.title.trim() || !note.content.trim()) {
+    if (!note?.title.trim() || !note?.content.trim()) {
       toast.error("Please add a title or content");
       return;
     }
@@ -76,6 +77,29 @@ const NoteDetail = () => {
       </div>
     );
   }
+
+  if (!note) {
+    return (
+      <div className="min-h-screen bg-base-200">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-2xl mx-auto">
+            <Link to="/">
+              <Button variant="ghost">
+                <ArrowLeftIcon className="h-5 w-5" />
+                Back to Notes
+              </Button>
+            </Link>
+            <div className="card bg-base-100 mt-6">
+              <div className="card-body">
+                <p className="text-center">Note not found</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-base-200">
       <div className="container mx-auto px-4 py-8">

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 import api from "@/lib/axios";
+import axios from "axios";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
@@ -29,9 +30,9 @@ const CreatePage = () => {
       });
       toast.success("Note created successfully");
       navigate("/");
-    } catch (error) {
+    } catch (error: unknown) {
       console.log("Error creating note", error);
-      if (error.response.status === 429) {
+      if (axios.isAxiosError(error) && error.response?.status === 429) {
         toast.error("Slow down! You're creating notes too fast", {
           duration: 4000,
           icon: "⚠️",
